@@ -2,7 +2,6 @@ import java.util.*;
 import java.lang.*;
 import java.io.*;
 
-//ADDing the comment to the java program!!!
 
 
 class Monkey {
@@ -10,13 +9,15 @@ class Monkey {
     private ArrayDeque<Integer> height /*= new ArrayDeque<>()*/;
     private Stack<Integer> jumper /*= new Stack<Integer>()*/;
     private String again;
-    private boolean Run = true;
+    private boolean Run = true,Ran;
 
     public Monkey() {
-        while(Run){
+        while(Run) {
+            System.out.flush();
             height = new ArrayDeque<>();
             jumper = new Stack<Integer>();
-            int n;
+            int n, tempnum;
+            String c;
             System.out.printf("Number of trees : ");
             Scanner getNum = new Scanner(System.in);
             do {
@@ -25,23 +26,52 @@ class Monkey {
                     getNum.next(); // this is important!
                 }
                 towerNum = getNum.nextInt();
-                if(towerNum < 0)System.out.println("Enter an positive integer");
+                if (towerNum < 0) System.out.println("Enter an positive integer");
 
             } while (towerNum < 0);
 
-            for (int i = 0; i < towerNum; i++) {
-                System.out.printf("     Tree Height (%d) = ", i + 1);
-                Scanner getHeight = new Scanner(System.in);
-                do {
-                    while (!getHeight.hasNextInt() /*|| getHeight.nextInt() < 0*/ ) {
-                        System.out.println("Please enter an integer!");
-                        getHeight.next();// this is important!
-                    }
-                    n = getHeight.nextInt();
-                    if(n < 0 ) System.out.println("Enter an positive integer");
-                } while (n < 0);
-                height.add(n);
+            System.out.println("Do you want to input the number yourself or random the number?");
+            System.out.println("Type 'input' or 'random'. Anything else is consider as input choice");
+            System.out.print("==> ");
+            Scanner ran = new Scanner(System.in);
+            do {
+                while (ran.hasNextInt()) {
+                    System.out.println("Please enter a string!");
+                    ran.next(); // this is important!\
+                }
+            } while (!ran.hasNext());
+            c = ran.nextLine();
+            switch(c){
+                case "input": Ran = false;break;
+                case "random": Ran = true;break;
+                default: Ran = false;break;
             }
+
+            if(Ran){
+                for (int i = 0; i < towerNum ; i++) {
+                    tempnum = (int) (10 + (Math.random() * (40 - 10)));
+                    System.out.printf("\n    Tree Height (%d) = ",i+1);
+                    System.out.print(tempnum);
+                    height.add(tempnum);
+                    }
+            }
+
+            else {
+                for (int i = 0; i < towerNum; i++) {
+                    System.out.printf("     Tree Height (%d) = ", i + 1);
+                    Scanner getHeight = new Scanner(System.in);
+                    do {
+                        while (!getHeight.hasNextInt()) {
+                            System.out.println("Please enter an integer!");
+                            getHeight.next();// this is important!
+                        }
+                        n = getHeight.nextInt();
+                        if (n < 0) System.out.println("Enter an positive integer");
+                    } while (n < 0);
+                    height.add(n);
+                }
+            }
+
             System.out.print("\n");
             move();
             System.out.println("\nDo you want to run again? Enter yes to run again or anything else to end the program.");
@@ -53,14 +83,18 @@ class Monkey {
                     Conti.next(); // this is important!\
                 }
             } while (!Conti.hasNext());
-            again = Conti.next();
-            switch (again){
-                case "Y" : True(); break;
-                case "y":  True(); break;
-                case "yes": True();break;
-                default: False();break;
-                            }
+            again = Conti.nextLine();
+            switch (again) {
+                case "yes":
+                    Run = true;
+                    addSpace();
+                    break;
+                default:
+                    Run = false;
+                    break;
+            }
         }
+
         System.out.println("The program is done. Thanks for playing!");
     }
 
@@ -73,6 +107,7 @@ class Monkey {
                 System.out.print("  " + count + "   From " + jump+ "-ft tree to " + first + "-ft tree\n");
                 count++;
                 continue; }
+                //System.out.println("heigh that will pop" + height.peekFirst());
             first = height.pop();
             if(!height.isEmpty())   // is the value inside height array isn't null print the move step
             {   if (first > height.peekFirst())jumper.add(first);
@@ -85,11 +120,8 @@ class Monkey {
         System.out.printf("\nTotal swinging paths = " + (count-1));
     }
 
-    public void True(){
-        Run = true;
-    }
-    public void False(){
-        Run = false;
+    public void addSpace(){
+        for(int i=0;i<10;i++)System.out.println("\n");
     }
 }
 
